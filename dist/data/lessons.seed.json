@@ -1,0 +1,368 @@
+{
+  "_comment": "Hand-made development seed. Replaced automatically as soon as data/lessons.json exists. Lesson Nine is transcribed from the book; Lessons Three and Four are reconstructed from the same scans, so entries marked derived:true are editorial rather than printed.",
+  "book": {
+    "titleEn": "At-Tareeqatul Asriyyah, Part I",
+    "titleAr": "الطريقة العصرية"
+  },
+  "lessons": [
+    {
+      "id": 3,
+      "titleEn": "Lesson Three",
+      "titleAr": "أَلدَّرْسُ الثَّالِثُ",
+      "topicEn": "Distant demonstratives dhaalika / tilka",
+      "scanPages": [5],
+      "bookPages": [19, 20],
+      "vocabulary": [
+        { "en": "That (masculine, distant)", "ar": "ذٰلِكَ" },
+        { "en": "That (masculine, nearby)", "ar": "ذَاكَ" },
+        { "en": "That (feminine)", "ar": "تِلْكَ" },
+        { "en": "Field", "ar": "مَيْدَانٌ" },
+        { "en": "Aeroplane", "ar": "طَائِرَةٌ" },
+        { "en": "Rose", "ar": "وَرْدَةٌ" },
+        { "en": "House", "ar": "بَيْتٌ" },
+        { "en": "Bed", "ar": "سَرِيرٌ" },
+        { "en": "Sun", "ar": "شَمْسٌ" },
+        { "en": "Car", "ar": "سَيَّارَةٌ" },
+        { "en": "Street", "ar": "شَارِعٌ" },
+        { "en": "Bicycle", "ar": "دَرَّاجَةٌ" },
+        { "en": "Writer (clerk)", "ar": "كَاتِبٌ" },
+        { "en": "Girl", "ar": "طِفْلَةٌ" },
+        { "en": "Boy", "ar": "طِفْلٌ" },
+        { "en": "Bus", "ar": "حَافِلَةٌ" }
+      ],
+      "sentences": [
+        { "ar": "ذٰلِكَ بَيْتٌ", "en": "That is a house", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "ذٰلِكَ شَارِعٌ", "en": "That is a street", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "ذٰلِكَ مَيْدَانٌ", "en": "That is a field", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "ذٰلِكَ سَرِيرٌ", "en": "That is a bed", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "ذٰلِكَ كَاتِبٌ", "en": "That is a clerk", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "ذٰلِكَ طِفْلٌ", "en": "That is a boy", "group": "ذٰلِكَ", "derived": true },
+        { "ar": "تِلْكَ سَيَّارَةٌ", "en": "That is a car", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ طَائِرَةٌ", "en": "That is an aeroplane", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ وَرْدَةٌ", "en": "That is a rose", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ دَرَّاجَةٌ", "en": "That is a bicycle", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ طِفْلَةٌ", "en": "That is a girl", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ حَافِلَةٌ", "en": "That is a bus", "group": "تِلْكَ", "derived": true },
+        { "ar": "تِلْكَ الشَّمْسُ", "en": "That is the sun", "group": "تِلْكَ", "derived": true }
+      ],
+      "qaPairs": [
+        { "questionAr": "مَا ذٰلِكَ؟", "answerAr": "ذٰلِكَ بَيْتٌ", "derived": true },
+        { "questionAr": "مَا تِلْكَ؟", "answerAr": "تِلْكَ سَيَّارَةٌ", "derived": true },
+        { "questionAr": "مَنْ ذٰلِكَ؟", "answerAr": "ذٰلِكَ كَاتِبٌ", "derived": true },
+        { "questionAr": "مَنْ تِلْكَ؟", "answerAr": "تِلْكَ طِفْلَةٌ", "derived": true },
+        { "questionAr": "هَلْ ذٰلِكَ شَارِعٌ؟", "answerAr": "نَعَمْ، ذٰلِكَ شَارِعٌ", "derived": true },
+        { "questionAr": "هَلْ تِلْكَ طَائِرَةٌ؟", "answerAr": "نَعَمْ، تِلْكَ طَائِرَةٌ", "derived": true },
+        { "questionAr": "هَلْ ذٰلِكَ مَيْدَانٌ؟", "answerAr": "لَا، بَلْ ذٰلِكَ شَارِعٌ", "derived": true },
+        { "questionAr": "هَلْ تِلْكَ دَرَّاجَةٌ؟", "answerAr": "لَا، بَلْ تِلْكَ حَافِلَةٌ", "derived": true }
+      ],
+      "translateToArabic": [
+        { "en": "Is that a bus?", "ar": "هَلْ تِلْكَ حَافِلَةٌ؟", "derived": true },
+        { "en": "That is a big house", "ar": "ذٰلِكَ بَيْتٌ كَبِيرٌ", "derived": true },
+        { "en": "That is a new car", "ar": "تِلْكَ سَيَّارَةٌ جَدِيدَةٌ", "derived": true },
+        { "en": "Who is that girl?", "ar": "مَنْ تِلْكَ الطِّفْلَةُ؟", "derived": true },
+        { "en": "That is a wide street", "ar": "ذٰلِكَ شَارِعٌ وَاسِعٌ", "derived": true }
+      ],
+      "translateToEnglish": [
+        { "ar": "تِلْكَ طَائِرَةٌ سَرِيعَةٌ", "en": "That is a fast aeroplane", "derived": true },
+        { "ar": "ذٰلِكَ كَاتِبٌ مَاهِرٌ", "en": "That is a skilful clerk", "derived": true },
+        { "ar": "تِلْكَ وَرْدَةٌ جَمِيلَةٌ", "en": "That is a beautiful rose", "derived": true },
+        { "ar": "ذٰلِكَ مَيْدَانٌ وَاسِعٌ", "en": "That is a wide field", "derived": true }
+      ],
+      "notesEn": [
+        "تِلْكَ is an Ism Ishaarah used for a single feminine word that is not too far away.",
+        "ذٰلِكَ and ذَاكَ point to a single masculine thing at a distance, where هٰذَا points to something near."
+      ]
+    },
+    {
+      "id": 4,
+      "titleEn": "Lesson Four",
+      "titleAr": "أَلدَّرْسُ الرَّابِعُ",
+      "topicEn": "Pronouns ana / anta / anti / huwa / hiya and the question word hal",
+      "scanPages": [5],
+      "bookPages": [21, 22],
+      "vocabulary": [
+        { "en": "I", "ar": "أَنَا" },
+        { "en": "You (masculine)", "ar": "أَنْتَ" },
+        { "en": "You (feminine)", "ar": "أَنْتِ" },
+        { "en": "He", "ar": "هُوَ" },
+        { "en": "She", "ar": "هِيَ" },
+        { "en": "Who", "ar": "مَنْ" },
+        { "en": "Teacher (male)", "ar": "أُسْتَاذٌ" },
+        { "en": "Teacher (female)", "ar": "أُسْتَاذَةٌ" },
+        { "en": "Pupil (male)", "ar": "تِلْمِيذٌ" },
+        { "en": "Pupil (female)", "ar": "تِلْمِيذَةٌ" },
+        { "en": "Yes", "ar": "نَعَمْ" },
+        { "en": "No", "ar": "لَا" },
+        { "en": "Rather (but)", "ar": "بَلْ" },
+        { "en": "Well-mannered (feminine)", "ar": "مُؤَدَّبَةٌ" }
+      ],
+      "sentences": [
+        {
+          "ar": "أَنَا أُسْتَاذٌ",
+          "en": "I am a teacher",
+          "group": "أَنَا – أَنْتَ – هُوَ",
+          "derived": false
+        },
+        {
+          "ar": "أَنْتَ تِلْمِيذٌ",
+          "en": "You are a pupil",
+          "group": "أَنَا – أَنْتَ – هُوَ",
+          "derived": false
+        },
+        { "ar": "هُوَ تِلْمِيذٌ", "en": "He is a pupil", "group": "أَنَا – أَنْتَ – هُوَ", "derived": false },
+        { "ar": "خَالِدٌ تِلْمِيذٌ", "en": "Khaalid is a pupil", "group": "هَلْ؟", "derived": false },
+        {
+          "ar": "أَنَا أُسْتَاذَةٌ",
+          "en": "I am a teacher (speaking as a woman)",
+          "group": "أَنَا – أَنْتِ – هِيَ",
+          "derived": false
+        },
+        {
+          "ar": "أَنْتِ تِلْمِيذَةٌ",
+          "en": "You are a pupil (speaking to a girl)",
+          "group": "أَنَا – أَنْتِ – هِيَ",
+          "derived": false
+        },
+        {
+          "ar": "هِيَ تِلْمِيذَةٌ",
+          "en": "She is a pupil",
+          "group": "أَنَا – أَنْتِ – هِيَ",
+          "derived": false
+        },
+        {
+          "ar": "هٰذِهِ فَاطِمَةُ",
+          "en": "This is Faatimah",
+          "group": "أَنَا – أَنْتِ – هِيَ",
+          "derived": false
+        },
+        {
+          "ar": "هِيَ مُؤَدَّبَةٌ",
+          "en": "She is well-mannered",
+          "group": "أَنَا – أَنْتِ – هِيَ",
+          "derived": false
+        },
+        { "ar": "هِيَ زَيْنَبُ", "en": "She is Zaynab", "group": "أَنَا – أَنْتِ – هِيَ", "derived": false }
+      ],
+      "qaPairs": [
+        { "questionAr": "مَنْ أَنْتَ يَا خَالِدُ؟", "answerAr": "أَنَا تِلْمِيذٌ", "derived": false },
+        { "questionAr": "مَنْ أَنَا؟", "answerAr": "أَنْتَ أُسْتَاذٌ", "derived": false },
+        { "questionAr": "مَنْ هُوَ؟", "answerAr": "هُوَ تِلْمِيذٌ", "derived": false },
+        { "questionAr": "هَلْ أَنْتَ تِلْمِيذٌ؟", "answerAr": "نَعَمْ، أَنَا تِلْمِيذٌ", "derived": false },
+        { "questionAr": "هَلْ أَنْتَ أُسْتَاذٌ؟", "answerAr": "لَا، بَلْ أَنَا تِلْمِيذٌ", "derived": false },
+        { "questionAr": "هَلْ أَنَا أُسْتَاذٌ؟", "answerAr": "نَعَمْ، أَنْتَ أُسْتَاذٌ", "derived": false },
+        {
+          "questionAr": "هَلْ خَالِدٌ تِلْمِيذٌ؟",
+          "answerAr": "نَعَمْ، خَالِدٌ تِلْمِيذٌ",
+          "derived": false
+        },
+        { "questionAr": "مَنْ أَنْتِ يَا فَاطِمَةُ؟", "answerAr": "أَنَا تِلْمِيذَةٌ", "derived": false },
+        { "questionAr": "مَنْ أَنَا يَا فَاطِمَةُ؟", "answerAr": "أَنْتِ أُسْتَاذَةٌ", "derived": false },
+        { "questionAr": "مَنْ هِيَ؟", "answerAr": "هِيَ زَيْنَبُ", "derived": false },
+        {
+          "questionAr": "هَلْ أَنْتِ تِلْمِيذَةٌ؟",
+          "answerAr": "نَعَمْ، أَنَا تِلْمِيذَةٌ",
+          "derived": false
+        },
+        {
+          "questionAr": "هَلْ أَنْتِ أُسْتَاذَةٌ؟",
+          "answerAr": "لَا، بَلْ أَنَا تِلْمِيذَةٌ",
+          "derived": false
+        }
+      ],
+      "translateToArabic": [
+        { "en": "Are you a pupil?", "ar": "هَلْ أَنْتَ تِلْمِيذٌ؟", "derived": true },
+        { "en": "No, rather I am a teacher", "ar": "لَا، بَلْ أَنَا أُسْتَاذٌ", "derived": true },
+        { "en": "Who is she?", "ar": "مَنْ هِيَ؟", "derived": true },
+        { "en": "She is a well-mannered pupil", "ar": "هِيَ تِلْمِيذَةٌ مُؤَدَّبَةٌ", "derived": true },
+        { "en": "Yes, I am a pupil", "ar": "نَعَمْ، أَنَا تِلْمِيذٌ", "derived": true }
+      ],
+      "translateToEnglish": [
+        { "ar": "هَلْ هُوَ أُسْتَاذٌ؟", "en": "Is he a teacher?", "derived": true },
+        { "ar": "لَا، بَلْ هُوَ تِلْمِيذٌ", "en": "No, rather he is a pupil", "derived": true },
+        { "ar": "أَنْتِ أُسْتَاذَةٌ مُؤَدَّبَةٌ", "en": "You are a well-mannered teacher", "derived": true },
+        { "ar": "هَلْ زَيْنَبُ تِلْمِيذَةٌ؟", "en": "Is Zaynab a pupil?", "derived": true }
+      ],
+      "notesEn": [
+        "هَلْ turns a statement into a yes/no question; the reply opens with نَعَمْ or with لَا، بَلْ.",
+        "Arabic distinguishes the gender of the person addressed: أَنْتَ to a male, أَنْتِ to a female."
+      ]
+    },
+    {
+      "id": 9,
+      "titleEn": "Lesson Nine",
+      "titleAr": "أَلدَّرْسُ التَّاسِعُ",
+      "topicEn": "Prepositions fi / alaa / fawqa / tahta",
+      "scanPages": [12],
+      "bookPages": [34, 35],
+      "vocabulary": [
+        { "en": "In", "ar": "فِي" },
+        { "en": "Pocket", "ar": "جَيْبٌ" },
+        { "en": "On/Upon", "ar": "عَلَى" },
+        { "en": "Roof", "ar": "سَطْحٌ" },
+        { "en": "Sparrow", "ar": "عُصْفُورٌ" },
+        { "en": "On top", "ar": "فَوْقَ" },
+        { "en": "Beneath", "ar": "تَحْتَ" },
+        { "en": "Sky", "ar": "سَمَاءٌ" },
+        { "en": "Child", "ar": "طِفْلٌ" },
+        { "en": "Flowers", "ar": "أَلْأَزْهَارُ" },
+        { "en": "Garden", "ar": "حَدِيقَةٌ" },
+        { "en": "Ground", "ar": "أَرْضٌ" },
+        { "en": "Cat", "ar": "هِرَّةٌ" },
+        { "en": "Principal", "ar": "أَلْمُدِيرُ" },
+        { "en": "Office", "ar": "مَكْتَبٌ" },
+        { "en": "Classroom", "ar": "فَصْلٌ" }
+      ],
+      "sentences": [
+        {
+          "ar": "أَلْقَلَمُ فِي الْجَيْبِ",
+          "en": "The pen is in the pocket",
+          "group": "فِي",
+          "derived": false
+        },
+        {
+          "ar": "مَحْمُودٌ فِي الْغُرْفَةِ",
+          "en": "Mahmood is in the room",
+          "group": "فِي",
+          "derived": false
+        },
+        {
+          "ar": "فَاطِمَةُ فِي الْبَيْتِ",
+          "en": "Faatimah is in the house",
+          "group": "فِي",
+          "derived": false
+        },
+        {
+          "ar": "خَالِدٌ فِي الْمَسْجِدِ",
+          "en": "Khaalid is in the Masjid",
+          "group": "فِي",
+          "derived": false
+        },
+        {
+          "ar": "أَلْكِتَابُ عَلَى الْمَكْتَبِ",
+          "en": "The book is on the desk",
+          "group": "عَلَى",
+          "derived": false
+        },
+        {
+          "ar": "مَحْمُودٌ عَلَى السَّطْحِ",
+          "en": "Mahmood is on the roof",
+          "group": "عَلَى",
+          "derived": false
+        },
+        {
+          "ar": "أَلْقَلَمُ عَلَى الْكِتَابِ",
+          "en": "The pen is on the book",
+          "group": "عَلَى",
+          "derived": false
+        },
+        {
+          "ar": "أَلْعُصْفُورُ عَلَى الشَّجَرَةِ",
+          "en": "The sparrow is on the tree",
+          "group": "عَلَى",
+          "derived": false
+        },
+        {
+          "ar": "أَلسَّمَاءُ فَوْقَنَا",
+          "en": "The sky is above us",
+          "group": "فَوْقَ – تَحْتَ",
+          "derived": false
+        },
+        {
+          "ar": "أَلسَّقْفُ فَوْقَنَا",
+          "en": "The ceiling is above us",
+          "group": "فَوْقَ – تَحْتَ",
+          "derived": false
+        },
+        {
+          "ar": "أَلْأَرْضُ تَحْتَنَا",
+          "en": "The ground is beneath us",
+          "group": "فَوْقَ – تَحْتَ",
+          "derived": false
+        },
+        {
+          "ar": "أَلطَّلَّاسَةُ تَحْتَ السَّبُّورَةِ",
+          "en": "The duster is beneath the blackboard",
+          "group": "فَوْقَ – تَحْتَ",
+          "derived": false
+        },
+        {
+          "ar": "أَلْهِرَّةُ تَحْتَ الْكُرْسِيِّ",
+          "en": "The cat is beneath the chair",
+          "group": "فَوْقَ – تَحْتَ",
+          "derived": false
+        }
+      ],
+      "qaPairs": [
+        { "questionAr": "أَيْنَ الْقَلَمُ؟", "answerAr": "أَلْقَلَمُ فِي الْجَيْبِ", "derived": false },
+        { "questionAr": "أَيْنَ مَحْمُودٌ؟", "answerAr": "مَحْمُودٌ فِي الْغُرْفَةِ", "derived": false },
+        { "questionAr": "مَاذَا فِي الْجَيْبِ؟", "answerAr": "أَلْقَلَمُ فِي الْجَيْبِ", "derived": false },
+        { "questionAr": "مَنْ فِي الْغُرْفَةِ؟", "answerAr": "مَحْمُودٌ فِي الْغُرْفَةِ", "derived": false },
+        { "questionAr": "مَنْ فِي الْبَيْتِ؟", "answerAr": "فَاطِمَةُ فِي الْبَيْتِ", "derived": false },
+        { "questionAr": "مَنْ فِي الْمَسْجِدِ؟", "answerAr": "خَالِدٌ فِي الْمَسْجِدِ", "derived": false },
+        { "questionAr": "أَيْنَ الْكِتَابُ؟", "answerAr": "أَلْكِتَابُ عَلَى الْمَكْتَبِ", "derived": false },
+        {
+          "questionAr": "مَاذَا عَلَى الْكِتَابِ؟",
+          "answerAr": "أَلْقَلَمُ عَلَى الْكِتَابِ",
+          "derived": false
+        },
+        { "questionAr": "مَنْ عَلَى السَّطْحِ؟", "answerAr": "مَحْمُودٌ عَلَى السَّطْحِ", "derived": false },
+        {
+          "questionAr": "مَاذَا عَلَى الشَّجَرَةِ؟",
+          "answerAr": "أَلْعُصْفُورُ عَلَى الشَّجَرَةِ",
+          "derived": false
+        },
+        { "questionAr": "أَيْنَ السَّمَاءُ؟", "answerAr": "أَلسَّمَاءُ فَوْقَنَا", "derived": false },
+        { "questionAr": "أَيْنَ السَّقْفُ؟", "answerAr": "أَلسَّقْفُ فَوْقَنَا", "derived": false },
+        { "questionAr": "أَيْنَ الْأَرْضُ؟", "answerAr": "أَلْأَرْضُ تَحْتَنَا", "derived": false },
+        {
+          "questionAr": "أَيْنَ الطَّلَّاسَةُ؟",
+          "answerAr": "أَلطَّلَّاسَةُ تَحْتَ السَّبُّورَةِ",
+          "derived": false
+        },
+        {
+          "questionAr": "أَيْنَ الْهِرَّةُ؟",
+          "answerAr": "أَلْهِرَّةُ تَحْتَ الْكُرْسِيِّ",
+          "derived": false
+        }
+      ],
+      "translateToArabic": [
+        { "en": "O Khaalid!", "ar": "يَا خَالِدُ!", "derived": true },
+        { "en": "Yes!", "ar": "نَعَمْ!", "derived": true },
+        { "en": "Where is your brother?", "ar": "أَيْنَ أَخُوكَ؟", "derived": true },
+        { "en": "My brother is at the school", "ar": "أَخِي فِي الْمَدْرَسَةِ", "derived": true },
+        { "en": "Where is your father?", "ar": "أَيْنَ أَبُوكَ؟", "derived": true },
+        { "en": "My father is in the Masjid", "ar": "أَبِي فِي الْمَسْجِدِ", "derived": true },
+        { "en": "Where is your teacher?", "ar": "أَيْنَ مُدَرِّسُكَ؟", "derived": true },
+        { "en": "My teacher is in the classroom", "ar": "مُدَرِّسِي فِي الْفَصْلِ", "derived": true },
+        { "en": "Where is your friend?", "ar": "أَيْنَ صَدِيقُكَ؟", "derived": true },
+        { "en": "My friend is at home", "ar": "صَدِيقِي فِي الْبَيْتِ", "derived": true },
+        { "en": "Where is your principal?", "ar": "أَيْنَ مُدِيرُكَ؟", "derived": true },
+        { "en": "My principal is in the office", "ar": "مُدِيرِي فِي الْمَكْتَبِ", "derived": true }
+      ],
+      "translateToEnglish": [
+        { "ar": "أَلْخَطِيبُ عَلَى الْمِنْبَرِ", "en": "The preacher is on the pulpit", "derived": true },
+        {
+          "ar": "وَالْمُسْلِمُونَ فِي الْمَسْجِدِ",
+          "en": "And the Muslims are in the Masjid",
+          "derived": true
+        },
+        { "ar": "هٰذِهِ مَدْرَسَتِي", "en": "This is my school", "derived": true },
+        { "ar": "أَلطُّلَّابُ فِي الْمَدْرَسَةِ", "en": "The students are in the school", "derived": true },
+        { "ar": "أَلطِّفْلُ تَحْتَ الشَّجَرَةِ", "en": "The child is beneath the tree", "derived": true },
+        { "ar": "وَالْعُصْفُورُ عَلَى الشَّجَرَةِ", "en": "And the sparrow is on the tree", "derived": true },
+        { "ar": "أَلْأَزْهَارُ فِي الْحَدِيقَةِ", "en": "The flowers are in the garden", "derived": true },
+        { "ar": "وَالْأَرْضُ تَحْتَنَا", "en": "And the ground is beneath us", "derived": true },
+        {
+          "ar": "أَلْحَجَّاجُ فِي مَكَّةَ الْمُكَرَّمَةِ",
+          "en": "The pilgrims are in Makkah al-Mukarramah",
+          "derived": true
+        }
+      ],
+      "notesEn": [
+        "فِي (in), عَلَى (on/upon), فَوْقَ (above) and تَحْتَ (beneath) are all followed by a noun in the genitive case.",
+        "فَوْقَ and تَحْتَ take pronoun endings directly: فَوْقَنَا (above us), تَحْتَنَا (beneath us).",
+        "أَيْنَ asks where, مَنْ asks who, and مَاذَا asks what."
+      ]
+    }
+  ]
+}
