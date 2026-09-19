@@ -1,0 +1,1338 @@
+/*
+ * The shared design language.
+ *
+ * Codified from the home screen, which is the design the app is built on:
+ *
+ *  - a compact title strip, then one filled dark-navy hero carrying whatever
+ *    the screen is for, with a white filled primary and translucent pills;
+ *  - quiet white panels with a hairline border and a generous radius, not a
+ *    shadow, so exactly one thing on a screen leads;
+ *  - small-caps letterspaced section labels naming a region without
+ *    competing with it;
+ *  - stat tiles pairing a large figure with a small muted caption;
+ *  - compact one-line rows with small right-aligned actions;
+ *  - a restrained blue accent against muted blue-greys.
+ *
+ * Everything here is used by more than one screen. It lives in its own file
+ * on purpose: rules shared between screens were once written inside the home
+ * screen's block, and restructuring that block deleted them wholesale, which
+ * unstyled the lesson picker and the whole reference screen at once. A screen
+ * may style its own parts; it may not own anything another screen renders.
+ */
+
+/* ---------------------------------------------------------------- frame */
+
+.app {
+  width: min(780px, 100%);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.app--centred {
+  min-height: 80vh;
+  justify-content: center;
+}
+
+/*
+ * The timed screens get the viewport and nothing more. dvh rather than vh so
+ * mobile browser chrome cannot silently steal the fourth option.
+ */
+.app--fixed {
+  width: min(1100px, 100%);
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  padding: var(--space-3) var(--space-4);
+  gap: var(--space-3);
+}
+
+@media (max-width: 560px) {
+  .app--fixed {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.app__footer {
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+/* --------------------------------------------------------------- helpers */
+
+.text-soft {
+  color: var(--text-soft);
+}
+.text-faint {
+  color: var(--text-faint);
+}
+.text-sm {
+  font-size: var(--text-sm);
+}
+.text-xs {
+  font-size: var(--text-xs);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-soft);
+}
+
+.loading__spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-line);
+  border-top-color: var(--accent);
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-detail {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  overflow-x: auto;
+  margin: 0;
+}
+
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+.reasons li::before {
+  content: '• ';
+}
+
+/* ---------------------------------------------------------------- panels */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* A panel nested inside another panel: tinted, no shadow of its own. */
+.panel--sunk {
+  background: var(--surface-sunk);
+  box-shadow: none;
+}
+
+.panel--error {
+  border-color: var(--bad-line);
+  align-items: flex-start;
+}
+
+/* A panel that names itself with a real heading rather than a section label:
+   an error, a dialog-like block. Most panels use .section__title instead. */
+.panel__title {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+/* ------------------------------------------------------- section labels */
+
+.section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.section__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
+}
+
+/* Same small caps as the label it follows, only lighter: it is part of the
+   label, not a second thing beside it. */
+.section__count {
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  margin-inline-start: var(--space-2);
+}
+
+/* --------------------------------------------------------------- buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  /* 48px tall: comfortable for a thumb. */
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: var(--text-base);
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.button--subtle {
+  background: var(--accent-softer);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+
+.button--ghost {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--text-soft);
+}
+
+/*
+ * A real button that stays out of the way: unmistakably interactive and
+ * comfortably tappable, but visually subordinate to the primary action.
+ */
+.button--quiet {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+/* Readable against a filled hero without shouting over the main button. */
+.button--on-accent {
+  background: rgb(255 255 255 / 0.14);
+  border-color: rgb(255 255 255 / 0.45);
+  color: var(--text-on-accent);
+  font-size: var(--text-sm);
+  min-height: 44px;
+}
+
+/* No accent fill behind it, so the translucent pill has to fall back. */
+.hero--calm .button--on-accent {
+  background: var(--accent-softer);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+
+/*
+ * 34px tall so a row of them stays compact, but the thing a thumb has to
+ * hit is 44px: the extra 5px above and below is invisible, extends only
+ * vertically, and so cannot overlap the button beside it.
+ */
+.button--tiny {
+  min-height: 34px;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  position: relative;
+}
+
+.button--tiny::after {
+  content: '';
+  position: absolute;
+  inset: -5px 0;
+}
+
+.button--small {
+  min-height: 38px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.button--hero {
+  width: 100%;
+  min-height: 56px;
+  font-size: var(--text-lg);
+  border-radius: var(--radius);
+}
+
+/* Hover is an enhancement only: everything works on tap. */
+@media (hover: hover) {
+  .button--primary:hover:not(:disabled) {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+  .button--subtle:hover:not(:disabled) {
+    background: var(--accent-soft);
+  }
+  .button--ghost:hover:not(:disabled) {
+    color: var(--accent-text);
+    border-color: var(--accent);
+  }
+  .button--quiet:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent-text);
+    background: var(--accent-softer);
+  }
+  .button--on-accent:hover:not(:disabled) {
+    background: rgb(255 255 255 / 0.26);
+    border-color: var(--surface);
+  }
+}
+
+/* Legibly unavailable rather than broken: it keeps its shape and a readable
+   label, and only loses its emphasis. */
+.button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background: transparent;
+  border-color: var(--line);
+  border-style: dashed;
+  color: var(--text-faint);
+}
+
+.button--primary:disabled,
+.button--on-accent:disabled {
+  opacity: 0.5;
+  border-style: solid;
+}
+
+.button--on-accent:disabled {
+  opacity: 0.55;
+  color: var(--text-on-accent);
+}
+
+.button--primary kbd {
+  background: rgb(255 255 255 / 0.18);
+  border-color: rgb(255 255 255 / 0.3);
+  color: inherit;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* A narrow control, then the primary taking the rest of the line. */
+.action-row--lead {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  flex-wrap: nowrap;
+}
+
+/* --------------------------------------------------------- icon buttons */
+
+/* Quiet by design: discoverable without competing with the hero, but still a
+   44x44 target however small the glyph inside it is. */
+.icon-button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  /* A resting surface, so a lone icon reads as a deliberate control rather
+     than a glyph adrift in whitespace. --text-faint measured 4.04:1 here,
+     below AA; --text-soft is 6.8:1. */
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  flex: none;
+  transition:
+    color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .icon-button:hover {
+    color: var(--accent-text);
+    background: var(--accent-softer);
+    border-color: var(--accent-line);
+  }
+}
+
+.icon-button:active {
+  background: var(--accent-soft);
+}
+
+.icon {
+  display: block;
+}
+
+/* ----------------------------------------------------------------- hero */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  /* Filled, so one thing on the screen obviously leads. Everything else is a
+     white card, and when everything leads nothing does. */
+  background: var(--accent);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow);
+}
+
+.hero--calm {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--accent-line);
+}
+
+/*
+ * A hero holding one thing, sized to the space it is given rather than to
+ * its own content. The quiz prompt is the case: it has to absorb whatever
+ * vertical slack is left after the header, the four options and the footer,
+ * without ever growing the page.
+ */
+.hero--centred {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 0;
+  overflow: hidden;
+  /* Top gets a touch more than the sides and bottom: the eyebrow label was
+     sitting almost flush against the card's edge. */
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  /* So the content inside can be sized against the room it actually has,
+     rather than against the viewport, which is not the same thing once the
+     rest of the screen has taken its share. */
+  container-type: size;
+}
+
+.hero--centred .hero__eyebrow {
+  letter-spacing: 0.07em;
+}
+
+.hero__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.hero--calm .hero__eyebrow {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* Title and topic adjacent, not shoved to opposite edges of the card. */
+.hero__heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.hero__title {
+  font-size: var(--text-2xl);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+/* Compound on purpose: `.topic` sets its own muted colour further down this
+   file, and a single class would lose to it and leave the topic unreadable
+   against the fill. */
+.hero .hero__topic {
+  color: inherit;
+  opacity: 0.92;
+  font-size: var(--text-base);
+}
+
+.hero__caption {
+  font-size: var(--text-base);
+  opacity: 0.9;
+  max-width: 52ch;
+}
+
+.hero__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.hero__progress .meter {
+  flex: 1 1 120px;
+  max-width: 220px;
+}
+
+.hero__progress-label {
+  font-size: var(--text-xs);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.hero__primary {
+  margin-top: var(--space-2);
+}
+
+/* The hero owns the look of its own primary: white on the filled card, the
+   ordinary accent fill on the calm one. */
+.hero__primary .button--primary {
+  background: var(--surface);
+  border-color: var(--surface);
+  color: var(--accent-text);
+  min-height: 58px;
+}
+
+.hero--calm .hero__primary .button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+@media (hover: hover) {
+  .hero__primary .button--primary:hover:not(:disabled) {
+    background: var(--accent-softer);
+    border-color: var(--accent-softer);
+  }
+  .hero--calm .hero__primary .button--primary:hover:not(:disabled) {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+}
+
+.hero__secondary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+@media (min-width: 520px) {
+  .hero__secondary {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------- chips */
+
+/*
+ * align-items matters here. A flex row defaults to stretching its children to
+ * the tallest one, so a single tall pill — an Arabic label, whose line box is
+ * far taller than Spectral's — inflated every pill beside it and left their
+ * text stranded at the top edge. Centring makes each pill hug its own text.
+ */
+.chips {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-block;
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  font-weight: 600;
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.chip--quiet {
+  background: transparent;
+  border-style: dashed;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.chip--accent {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+
+/* A chip riding on the filled hero, where the accent is the background. */
+.hero .chip {
+  background: rgb(255 255 255 / 0.16);
+  border-color: rgb(255 255 255 / 0.4);
+  color: var(--text-on-accent);
+}
+
+.badge {
+  display: inline-block;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- meter */
+
+.meter {
+  height: 9px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+
+.meter--sm {
+  height: 6px;
+}
+
+.meter__fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  transition: width var(--duration) var(--ease);
+}
+
+.meter--good .meter__fill {
+  background: var(--good);
+}
+
+/* A meter sitting on the filled hero, where the accent is the background. */
+.meter--on-accent {
+  background: rgb(255 255 255 / 0.28);
+}
+
+.meter--on-accent .meter__fill {
+  background: var(--surface);
+}
+
+/* ----------------------------------------------------------- stat tiles */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3) var(--space-4);
+}
+
+/* Stays two-by-two until one row genuinely fits. Measured across a width
+   sweep: four columns at 560px leave 112px per stat, which is cramped; at
+   680px they get 142px and read properly. */
+@media (min-width: 680px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat {
+  min-width: 0;
+}
+
+.stat__label {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  font-weight: 600;
+}
+
+.stat__value {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+.stat__note {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-faint);
+}
+
+/* ------------------------------------------------------------ list rows */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A list that owns a box of its own, and scrolls rather than growing. */
+.rows--boxed {
+  max-height: 320px;
+  overflow-y: auto;
+  /* Keeps the list from swallowing the page scroll on a phone. */
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.rows--pending {
+  opacity: 0.6;
+}
+
+/*
+ * One line, always: the topic is the part that gives way, so every row in a
+ * 75-row list is the same height.
+ */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: nowrap;
+  /* Floor set by the Arabic line box, not by the Latin lesson name. */
+  min-height: 56px;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--line);
+}
+
+.rows > .row:first-child,
+.rows > li:first-child .row {
+  border-top: none;
+}
+
+.rows--boxed .row {
+  padding-inline: var(--space-3);
+}
+
+.row--on {
+  background: var(--accent-softer);
+}
+
+/* Only rows that are themselves the control get the pointer and the tint. */
+label.row {
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  label.row:hover {
+    background: var(--accent-softer);
+  }
+}
+
+.row input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.row__name {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.row__title {
+  font-weight: 650;
+  white-space: nowrap;
+  flex: none;
+}
+
+.row__topic {
+  color: var(--text-soft);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.row__meter {
+  display: block;
+  width: 72px;
+  flex: none;
+}
+
+/* In a row the bar is small and sat at very low contrast, reading as an
+   underline artefact rather than a progress indicator. */
+.row__meter .meter {
+  height: 7px;
+  background: var(--line-strong);
+}
+
+.row__figure {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--accent);
+  min-width: 38px;
+  text-align: right;
+  flex: none;
+}
+
+.row__meta {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  white-space: nowrap;
+  flex: none;
+  min-width: 68px;
+}
+
+.row__actions {
+  display: inline-flex;
+  gap: var(--space-2);
+  flex: none;
+}
+
+/* On a phone the meter and the raw counts cannot share a row with the name
+   and the actions, so they give way: the percentage and the buttons are what
+   matter at that width. */
+@media (max-width: 560px) {
+  .row__meter,
+  .row__meta--optional {
+    display: none;
+  }
+
+  .row,
+  .row__name {
+    gap: var(--space-2);
+  }
+
+  .row__actions .button {
+    padding-inline: var(--space-2);
+  }
+}
+
+/* ------------------------------------------------------------ form fields */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.field__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.field__input {
+  font: inherit;
+  font-size: var(--text-sm);
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.field__input::placeholder {
+  color: var(--text-faint);
+}
+
+.field--grow {
+  flex: 1 1 220px;
+}
+
+/* A two-digit lesson number does not need an 855px input. */
+.field--number {
+  flex: 0 0 72px;
+  width: 72px;
+}
+
+.field--number .field__input {
+  padding-inline: var(--space-2);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Search leads in the picker, so it reads as the primary control. */
+.field__input--search {
+  border-color: var(--accent-line);
+  background: var(--surface);
+}
+
+.field__input--search:focus {
+  border-color: var(--accent);
+}
+
+/* -------------------------------------------------------------- notices */
+
+.notice {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  flex-wrap: wrap;
+}
+
+.notice--warn {
+  background: var(--warn-bg);
+  border-color: var(--warn-line);
+  color: var(--warn);
+}
+.notice--error {
+  background: var(--bad-bg);
+  border-color: var(--bad-line);
+  color: var(--bad);
+}
+.notice--info {
+  background: var(--accent-softer);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+
+.notice__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-weight: 700;
+  font-size: var(--text-xs);
+}
+
+.notice__body {
+  flex: 1 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.notice__title {
+  font-weight: 700;
+}
+
+.notice__action {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+/* ------------------------------------------------------- session header */
+
+/*
+ * The header the quiz and the flashcards share. Two screens in one flow
+ * cannot look like two products, so the counter, the bar and the pills are
+ * one component rather than one screen borrowing the other's classes.
+ */
+.session {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.session__status {
+  display: flex;
+  justify-content: space-between;
+  /* centre, not baseline: the row holds a 44px control alongside the text. */
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  flex-wrap: wrap;
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+/* An <h1>, so the timed screens have a real page heading; sized and weighted
+   to match the <p> it replaced rather than the browser's h1 default. */
+.session__counter {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.session__counter strong {
+  color: var(--accent-text);
+  font-size: var(--text-lg);
+}
+
+.session__trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+.session__trailing strong {
+  color: var(--accent-text);
+  font-size: var(--text-lg);
+}
+
+/* 44x44 minimum, so it is reliably hittable with a thumb. */
+.session__exit {
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: var(--space-4);
+  white-space: nowrap;
+  font-size: var(--text-sm);
+}
+
+.session__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  width: 100%;
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------- book excerpt */
+
+/* The book's model sentence, wherever it is quoted. */
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+}
+
+.example--plain {
+  background: var(--surface-sunk);
+}
+
+.example__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.example__ar {
+  display: block;
+  color: var(--text);
+}
+
+.example__en {
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+/* ------------------------------------------------------------ topic labels */
+
+/*
+ * A lesson topic, possibly mixing scripts. One line, truncated: in a 75-row
+ * list a uniform scannable row beats showing every topic in full.
+ *
+ * Truncation is horizontal only. This once had `height: 1.85em` with
+ * `overflow: hidden` to force uniform rows, which sheared the descenders off
+ * ن and م — the row height was being set by the Latin text rather than by
+ * what the Arabic physically needs. Uniformity now comes from the row's
+ * min-height and a shared line-height; nothing clips through a letterform.
+ */
+.topic {
+  display: block;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--text-sm);
+  /* Measured ink at 15px: 28px in Amiri, 22.5px in IndoPak, 34.3px in Noto
+     Nastaliq for a single word — a multi-word bracketed string like
+     "(هذا) (ما هذا؟) (من هذا؟)" runs deeper again, and 2.4 (a 36px box, 1.7px
+     of headroom over the single-word measurement) was clipping its harakat
+     against the top of the line. 2.9 gives a 43.5px box, comfortably clear
+     of the deepest ink actually seen, and still keeps every row the same
+     height whichever font is chosen. */
+  line-height: 2.9;
+  color: var(--text-soft);
+}
+
+.topic__run {
+  unicode-bidi: isolate;
+}
+
+.topic__run + .topic__run {
+  margin-inline-start: 0.4em;
+}
+
+.topic__run--en {
+  font-family: var(--font-ui);
+  direction: ltr;
+}
+
+/*
+ * Secondary annotation: a touch larger than the English beside it so the
+ * letterforms stay legible, but deliberately smaller than the lesson name it
+ * annotates. Sizing the whole mixed string as Arabic is what made the English
+ * words in "Absent pronouns (ه) (ها)" dwarf everything around them.
+ *
+ * Deliberately not scaled by --ar-scale. Coupling a compact label to the
+ * per-face display scale made the IndoPak topic render at 23.6px and blow the
+ * row out to 68px while Amiri's clipped at 15px — one rule producing both
+ * failures at once. A fixed size plus a line box measured against the deepest
+ * face gives containment and uniform rows in all three.
+ */
+.topic__run--ar {
+  font-family: var(--font-ar);
+  direction: rtl;
+  font-size: 15px;
+  line-height: 2.9;
+}
+
+/* -------------------------------------------------------------- dialog */
+
+.dialog {
+  width: min(540px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(86dvh, 760px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.dialog::backdrop {
+  background: rgb(11 21 32 / 0.55);
+}
+
+.dialog[open] {
+  animation: dialog-in var(--duration) var(--ease);
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.dialog__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.dialog__title {
+  font-size: var(--text-lg);
+  font-weight: 650;
+  color: var(--accent-text);
+}
+
+/* The dialog's own content scrolls; the page behind it never does. */
+.dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-5);
+}
+
+.dialog__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--line);
+  background: var(--surface-sunk);
+}
+
+.dialog__status {
+  margin-right: auto;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+/* A comfortable sheet on a phone rather than a cramped desktop dialog. */
+@media (max-width: 560px) {
+  .dialog {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 92dvh;
+    margin: auto auto 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: none;
+  }
+
+  .dialog__head,
+  .dialog__foot {
+    padding-inline: var(--space-4);
+  }
+
+  .dialog__body {
+    padding: var(--space-4);
+  }
+
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+}
+
+/* --------------------------------------------------------- segmented set */
+
+.segmented {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.segmented__item {
+  flex: 1;
+  min-height: 46px;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.segmented__item--on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.segmented--stack {
+  flex-direction: column;
+}
+
+.segmented--stack .segmented__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  text-align: left;
+}
+
+.segmented__note {
+  font-weight: 500;
+  font-size: var(--text-xs);
+  opacity: 0.75;
+}
+
+/* -------------------------------------------------------------- tooltip */
+
+/*
+ * Transparent to layout: `block` plus full width/height so wrapping a tile
+ * button in this does not change how it fills its grid cell — a bare
+ * `inline-block` would shrink-wrap to the button's own intrinsic size before
+ * the button's own `width: 100%` had anything real to resolve against.
+ */
+.tooltip-anchor {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 30;
+  transform: translateX(-50%);
+  max-width: min(220px, calc(100vw - 16px));
+  width: max-content;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--surface);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+}
+
+.tooltip--above {
+  transform: translate(-50%, -100%);
+}
+
+.tooltip--below {
+  transform: translateX(-50%);
+}
+
+/* A small triangle pointing back at whatever the bubble is describing. */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.tooltip--above::after {
+  bottom: -3px;
+}
+
+.tooltip--below::after {
+  top: -3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tooltip {
+    animation: tooltip-in var(--duration-fast) var(--ease);
+  }
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

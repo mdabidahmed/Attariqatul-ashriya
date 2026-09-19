@@ -1,0 +1,239 @@
+/*
+ * Design tokens. The textbook is printed blue on white, so the light theme
+ * follows it; the dark theme keeps the same blue accent at lower luminance.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* --- palette: blue accent ------------------------------------------ */
+  --accent: #1d4f91;
+  --accent-strong: #163f77;
+  --accent-soft: #dceaf8;
+  --accent-softer: #f1f7fd;
+  --accent-line: #bfd8f0;
+  --accent-text: #10305c;
+
+  /* --- surfaces ----------------------------------------------------- */
+  --bg: #f4f8fc;
+  --surface: #ffffff;
+  --surface-sunk: #f6f9fd;
+  --surface-raised: #ffffff;
+  --line: #d9e3ef;
+  --line-strong: #c2d2e5;
+
+  /* --- text --------------------------------------------------------- */
+  --text: #16202e;
+  --text-soft: #4a5769;
+  /* Measured, not picked: #6f7b8d came to 4.29:1 on white and 4.02:1 on the
+     page, under AA for the 12px captions and row metadata that use it most.
+     This is 5.14:1 and 4.82:1 at the same hue. */
+  --text-faint: #626e80;
+  --text-on-accent: #ffffff;
+
+  /* --- semantic ----------------------------------------------------- */
+  --good: #0f6b45;
+  --good-bg: #e4f5ec;
+  --good-line: #6cc09a;
+  --bad: #a92a20;
+  --bad-bg: #fdeceb;
+  --bad-line: #e8a29b;
+  --warn: #7d5300;
+  --warn-bg: #fdf4e3;
+  --warn-line: #e6c98d;
+
+  /* --- spacing scale ------------------------------------------------ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* --- radii -------------------------------------------------------- */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* --- type scale --------------------------------------------------- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+
+  /* --- elevation ---------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgb(16 48 92 / 0.07);
+  --shadow: 0 1px 2px rgb(16 48 92 / 0.06), 0 6px 18px rgb(16 48 92 / 0.07);
+  --shadow-lg: 0 2px 6px rgb(16 48 92 / 0.09), 0 16px 38px rgb(16 48 92 / 0.13);
+
+  /* --- motion ------------------------------------------------------- */
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 120ms;
+  --duration: 200ms;
+
+  /* --- fonts -------------------------------------------------------- */
+  /* English is deliberately quieter than the Arabic it frames. */
+  --font-ui: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /*
+   * Three Arabic faces, each with a local fallback so the app stays readable
+   * offline. Amiri is Naskh: it matches how the textbook is typeset and keeps
+   * harakat legible at small sizes, so it is the default. The Nastaliq faces
+   * are available through the in-app font toggle.
+   */
+  --font-ar-naskh: 'Amiri', 'Geeza Pro', 'Al Bayan', 'Baghdad', 'Times New Roman', serif;
+  --font-ar-indopak: 'IndoPak Nastaleeq', 'Noto Nastaliq Urdu', 'Amiri', 'Geeza Pro', serif;
+  --font-ar-nastaliq: 'Noto Nastaliq Urdu', 'IndoPak Nastaleeq', 'Amiri', 'Geeza Pro', serif;
+
+  /*
+   * The active Arabic face and the vertical rhythm it needs.
+   *
+   * `--ar-line-height` is the *reading* leading: enough room for harakat on
+   * wrapped body text. It is far too tall for a metadata pill or a one-line
+   * caption, so compact contexts use the `-tight` pair instead.
+   *
+   * "Tight" is relative to the reading rhythm, never tight enough to shear a
+   * glyph. Arabic needs asymmetric room: harakat sit above the letters and
+   * ن م ج ح ع ي ق س ل ك ه و ر all drop well below the baseline, deepest in
+   * final position. These values are floors set by the Arabic glyph extent,
+   * measured against canvas ink metrics — not by the Latin text beside it.
+   */
+  --font-ar: var(--font-ar-naskh);
+  --ar-line-height: 1.95;
+  --ar-pad-block: 0.12em;
+  --ar-line-height-tight: 1.8;
+  --ar-pad-block-tight: 0.06em;
+  /*
+   * Room for Arabic in a box that clips, given as `top bottom`.
+   *
+   * A line box is not enough, because a face's ink routinely exceeds the
+   * ascent and descent it declares. These are measured, not guessed: canvas
+   * ink metrics over all 3,461 Arabic strings the quiz can show, in each
+   * face, against the line box this stylesheet actually gives them. Only
+   * the quiz options clip, and only because four long sentences have to
+   * stay on screen at once.
+   *
+   * Amiri: مَلْجَأٌ rises 1.48em above the baseline against a declared
+   * ascent of 1.09em, which was shearing the tops off hamza and damma.
+   */
+  --ar-pad-clip: 0.38em 0.16em;
+  /* Amiri draws small inside its em box, so the whole Arabic scale is nudged
+     up; each face sets its own factor. */
+  --ar-scale: 1.15;
+
+  /*
+   * Height reserved for the quiz's bottom row. The keyboard hint and the
+   * post-answer feedback bar both live there, so answering swaps one for the
+   * other without moving a single option.
+   *
+   * One value at every viewport: the bar is now a single line that truncates
+   * rather than wrapping, so it no longer needs more room when the window is
+   * tall — and the extra 36px it used to reserve there goes to the prompt.
+   */
+  --quiz-footer-height: 72px;
+}
+
+/*
+ * Nastaliq descends steeply and stacks its letters diagonally, so vocalised
+ * text clips against leading tuned for Naskh. Both Nastaliq options get far
+ * more line height and vertical padding, and a slightly smaller size so the
+ * long joined forms still fit the option cards.
+ */
+/*
+ * Declared explicitly, not just as the :root default, so a scoped
+ * `data-arabic-font` — the settings preview — can override a Nastaliq
+ * ancestor back to Naskh.
+ */
+[data-arabic-font='amiri'] {
+  --font-ar: var(--font-ar-naskh);
+  --ar-line-height: 1.95;
+  --ar-pad-block: 0.12em;
+  --ar-line-height-tight: 1.8;
+  --ar-pad-block-tight: 0.06em;
+  --ar-pad-clip: 0.38em 0.16em;
+  --ar-scale: 1.15;
+}
+
+[data-arabic-font='indopak'] {
+  --font-ar: var(--font-ar-indopak);
+  --ar-line-height: 2.9;
+  --ar-pad-block: 0.5em;
+  --ar-line-height-tight: 2.2;
+  --ar-pad-block-tight: 0.1em;
+  /* Measured: this face needs nothing extra. Its own box is 2.04em against
+     2.2em of leading, and its ink stays inside that. */
+  --ar-pad-clip: 0.1em;
+  --ar-scale: 1.6;
+}
+
+[data-arabic-font='nastaliq'] {
+  --font-ar: var(--font-ar-nastaliq);
+  --ar-line-height: 3.2;
+  --ar-pad-block: 0.55em;
+  --ar-line-height-tight: 2.35;
+  --ar-pad-block-tight: 0.12em;
+  /*
+   * The expensive one. Noto Nastaliq's own box is 2.5em, wider than the
+   * 2.35em of leading above it, so the half-leading is negative before any
+   * ink is drawn; on top of that هَلْ سَلَّمْتُمْ rises 2.39em and the
+   * ﷺ ligature in رَسُوْلِيْ مُحَمَّدٌ ﷺ falls 1.38em. All of that room
+   * has to come from padding.
+   */
+  --ar-pad-clip: 0.62em 0.92em;
+  --ar-scale: 1;
+}
+
+/*
+ * `data-theme` is always resolved to a concrete `light` or `dark` by
+ * `useTheme` before this matters — including the "System" preference, which
+ * is resolved in JS rather than left to a `prefers-color-scheme` media query
+ * here, so the settings modal has exactly one thing to override. The inline
+ * script in `index.html` does the same resolution before the app mounts, so
+ * the first paint never flashes the wrong theme.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --accent: #6aa6e0;
+  --accent-strong: #8dbdea;
+  --accent-soft: #1b3350;
+  --accent-softer: #16263c;
+  --accent-line: #2d4a70;
+  --accent-text: #cfe3f7;
+
+  --bg: #0d1520;
+  --surface: #151f2c;
+  --surface-sunk: #111a25;
+  --surface-raised: #1a2634;
+  --line: #26323f;
+  --line-strong: #35434f;
+
+  --text: #e8eef5;
+  --text-soft: #adbacb;
+  --text-faint: #8593a5;
+  --text-on-accent: #0b1520;
+
+  --good: #6ed3a3;
+  --good-bg: #12301f;
+  --good-line: #2f7a54;
+  --bad: #f3a099;
+  --bad-bg: #351815;
+  --bad-line: #8a3a33;
+  --warn: #e7c184;
+  --warn-bg: #2f2414;
+  --warn-line: #6b5326;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 6px 18px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.4), 0 16px 38px rgb(0 0 0 / 0.5);
+}

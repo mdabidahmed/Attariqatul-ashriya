@@ -2,6 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Resolves the theme preference before the first paint, so a returning
+      // visitor never sees a flash of the wrong theme. Mirrors the same
+      // "System" resolution `useTheme` does once React mounts, and the same
+      // localStorage key `state/storage.ts` writes it under.
+      ;(function () {
+        try {
+          var raw = window.localStorage.getItem('attariqa.v1.theme')
+          var theme = raw ? JSON.parse(raw) : null
+          if (theme !== 'light' && theme !== 'dark') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+          document.documentElement.setAttribute('data-theme', theme)
+        } catch (error) {
+          // No storage, no matchMedia: fall through to the default light theme.
+        }
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1d4f91" />

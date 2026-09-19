@@ -1,0 +1,1110 @@
+/*
+ * Per-screen rules only.
+ *
+ * Anything two screens share belongs in ui.css, not here. A screen may style
+ * its own parts; it may never own a rule another screen renders against —
+ * that coupling is what let a home-screen restructure silently unstyle the
+ * lesson picker and the reference screen at once.
+ */
+
+/* ----------------------------------------------------------- home screen */
+
+.home {
+  gap: var(--space-4);
+}
+
+/*
+ * Orientation, not content. The eyebrow that used to sit above the title read
+ * "Practise the exercises", which told a daily user nothing they did not
+ * already know, so it is gone; the strip is quieter without being taller.
+ */
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Centred rather than baseline-aligned: two scripts on one line sit off each
+   other's baselines, and centring is the reliable way to settle them. */
+.masthead__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.masthead__title-en {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* A hairline, so the title and its Arabic name read as two things. */
+.masthead__sep {
+  flex: none;
+  width: 1px;
+  height: 1.15em;
+  background: var(--line-strong);
+}
+
+/* Lighter and quieter than the English, so it reads as the name of the book
+   rather than a continuation of the sentence. */
+.masthead__title-ar {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+/*
+ * At phone width the Arabic name is what gives way: the English title is the
+ * identifier, and the strip must not grow to a second line.
+ */
+@media (max-width: 560px) {
+  .masthead__sep,
+  .masthead__title-ar {
+    display: none;
+  }
+
+  .masthead__title {
+    font-size: var(--text-base);
+  }
+}
+
+/* --- the book as a map ------------------------------------------------ */
+
+.book-map {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+}
+
+.book-map__caption {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: var(--space-2);
+}
+
+.tile {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface-sunk);
+  color: var(--text-soft);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    transform: scale(1.12);
+  }
+}
+
+/* A tile is 34-40px on a desktop, which a mouse hits easily and a thumb
+   does not. Fingers get 44px; the map just runs to more rows. */
+@media (pointer: coarse) {
+  .tiles {
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  }
+
+  .tile {
+    min-height: 44px;
+  }
+}
+
+/* Five tints, so a whole book of tiles reads as a heat map at a glance. */
+.tile--t0 {
+  background: var(--surface-sunk);
+}
+.tile--t1 {
+  background: var(--accent-softer);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+.tile--t2 {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-text);
+}
+.tile--t3 {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+.tile--t4 {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--surface);
+}
+.tile--reference {
+  background: transparent;
+  border-style: dashed;
+  color: var(--text-faint);
+}
+
+.tile--next {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.icon-button--settings .icon {
+  transition: transform var(--duration) var(--ease);
+}
+
+@media (hover: hover) {
+  .icon-button--settings:hover .icon {
+    transform: rotate(30deg);
+  }
+}
+
+/* ----------------------------------------------------------- disclosure */
+
+.disclosure {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.disclosure__summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--accent-text);
+  border-radius: var(--radius);
+}
+
+.disclosure[open] .disclosure__summary {
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ---------------------------------------------------------- setup panel */
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4);
+}
+
+.setup__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.check-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.check {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--surface);
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+
+.check--on {
+  border-color: var(--accent);
+  background: var(--accent-softer);
+}
+
+.check input {
+  margin-top: 3px;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  flex: none;
+}
+
+.check__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.check__title {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.check__note {
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+.check__meta {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.check__meta--empty {
+  color: var(--bad);
+}
+
+/* Shown while a filtered list is catching up with the input. */
+.check-list--pending {
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------------- lesson picker */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.picker__summary {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Search leads; the range controls are a quieter second row. */
+.picker__controls,
+.picker__range {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.picker__range {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+}
+
+.picker__range-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.picker__count {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex: none;
+}
+
+.picker__count--none {
+  font-style: italic;
+}
+
+/* ----------------------------------------------------------- settings */
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.setting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.setting__title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
+}
+
+.setting__hint,
+.setting__note {
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+.font-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+  /* Room for the tallest face, so switching does not resize the dialog. */
+  min-height: 160px;
+}
+
+.font-preview__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.font-preview__sample {
+  display: block;
+  color: var(--text);
+}
+
+/* ----------------------------------------------------------- quiz screen */
+
+/*
+ * The quiz is a fixed-viewport layout: everything — counter, prompt, all four
+ * options and the keyboard hint — has to be on screen at once, because the
+ * student answers a question every few seconds and scrolling breaks that
+ * rhythm entirely.
+ *
+ * Rows: header, prompt (takes the slack), options (sized to content), footer
+ * (reserved). The prompt absorbing the spare space is what keeps a one- or
+ * two-line prompt from moving the options, and it makes the Arabic the
+ * obvious focal point.
+ */
+.quiz {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(112px, 1fr) auto var(--quiz-footer-height);
+  /* Not minmax(0, 1fr): a zero floor let a short window (or a tall keyboard
+     eating the viewport) squeeze this row toward nothing, and the prompt's
+     own font-size formula reads that squeeze back through `cqh` — so the
+     row shrinking fed the text shrinking, down to a font-size of ~0 with
+     nothing on screen to say what the question even was. 112px is the
+     eyebrow plus one line of the smallest prompt text plus its padding, so
+     the question is always at least readable; a wide feedback bar grew the
+     column past the viewport and focusing Next then scrolled the whole
+     fixed screen sideways, which the minmax also still guards against. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  /* The same reading measure as every other screen. A single-word answer in
+     an 1100px row was four fifths empty white. */
+  width: min(780px, 100%);
+  margin-inline: auto;
+}
+
+/* Sentences and Q&A answers need the width: it is what keeps them to one or
+   two lines, and vertical space is the scarce resource here. */
+.quiz--wide {
+  width: min(1100px, 100%);
+}
+
+/*
+ * Sized against the row, not the viewport.
+ *
+ * 4.6vh alone assumes the prompt's share of the screen is fixed, and it is
+ * not: with IndoPak selected the four options are ~100px each, which on a
+ * 720px-tall window leaves the prompt 82px and the hero sheared the
+ * descenders off a 60px line. The cap is the room that exists — the row's
+ * own height, less the eyebrow — so the prompt can only ever be as big as
+ * it can be drawn whole. At ordinary sizes it never binds.
+ */
+.prompt__text {
+  display: block;
+  text-align: center;
+  color: inherit;
+  /* max(1rem, …): belt-and-braces alongside the row's own 112px floor above.
+     `62cqh - 17px` goes negative once the container is small enough, and a
+     negative or near-zero font-size is not a small question, it is an
+     invisible one — the sentence is still on screen, just too small to see. */
+  font-size: max(1rem, min(clamp(1.6rem, 4.6vh, 2.6rem), calc(62cqh - 17px)));
+}
+
+/*
+ * Display leading, not reading leading. The prompt is one or two centred
+ * lines, and the reading rhythm — 2.9em in IndoPak — made its line box 173px
+ * tall in a row the tall Nastaliq options had squeezed to 82px, so the hero
+ * clipped it. Tight leading plus the clip headroom contains the ink and
+ * takes the pressure off the row at the same time.
+ */
+.prompt__text.phrase--ar {
+  font-size: max(1rem, min(calc(clamp(1.6rem, 4.6vh, 2.6rem) * var(--ar-scale)), calc(62cqh - 17px)));
+  line-height: var(--ar-line-height-tight);
+  padding-block: var(--ar-pad-clip);
+}
+
+/* ------------------------------------------------------------- options */
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  align-content: end;
+}
+
+.option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  /* 52px still clears the 44px minimum tap target, and four of them plus the
+     prompt now fit a 720px-tall laptop. */
+  min-height: 52px;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .option:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-softer);
+  }
+}
+
+.option:active:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.option__letter {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  flex: none;
+}
+
+/* Sits next to the badge rather than at the far edge, so the letter and its
+   answer read as one unit instead of two things at opposite ends of a box. */
+.option__text {
+  min-width: 0;
+  text-align: start;
+  /* Items longer than MAX_ITEM_CHARS never reach the UI, so nothing legitimate
+     is clipped; this only stops a card growing without limit if it ever did. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+/* The one place in the app where Arabic sits inside a clipping box, so it
+   is the one place that needs the clip headroom rather than the tight pad. */
+.option .phrase--ar {
+  line-height: var(--ar-line-height-tight);
+  padding-block: var(--ar-pad-clip);
+  font-size: calc(clamp(1.05rem, 2.6vh, 1.6rem) * var(--ar-scale));
+}
+
+.option__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  min-width: 20px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.option__badge-label {
+  display: none;
+}
+
+@media (min-width: 420px) {
+  .option__badge {
+    min-width: 72px;
+  }
+  .option__badge-label {
+    display: inline;
+  }
+}
+
+.option--correct {
+  border-color: var(--good-line);
+  background: var(--good-bg);
+}
+.option--correct .option__letter {
+  background: var(--good);
+  color: var(--surface);
+}
+.option--correct .option__badge {
+  color: var(--good);
+}
+
+.option--wrong {
+  border-color: var(--bad-line);
+  background: var(--bad-bg);
+}
+.option--wrong .option__letter {
+  background: var(--bad);
+  color: var(--surface);
+}
+.option--wrong .option__badge {
+  color: var(--bad);
+}
+
+/* Still clearly readable: the options not picked are worth studying too. */
+.option--muted {
+  opacity: 0.62;
+}
+
+.quiz__footer {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* -------------------------------------------------------------- feedback */
+
+/*
+ * One line, at every width, by construction.
+ *
+ * This used to wrap, and measured across the width sweep it overflowed its
+ * reserved row at eight widths out of ten — up to 116px past it. The
+ * overflow itself was invisible, but moving focus to Next then scrolled the
+ * fixed container to reveal the button, and every option jumped up to 41px
+ * up the screen. Wrapping is therefore off: each part truncates instead,
+ * and the tick and cross on the cards already carry the full text.
+ */
+.feedback {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--text-sm);
+}
+
+.feedback--correct {
+  background: var(--good-bg);
+  border-color: var(--good-line);
+}
+.feedback--wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad-line);
+}
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  white-space: nowrap;
+  flex: none;
+}
+
+.verdict__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: var(--text-xs);
+  color: var(--surface);
+}
+
+.verdict--correct {
+  color: var(--good);
+}
+.verdict--correct .verdict__icon {
+  background: var(--good);
+}
+
+.verdict--wrong {
+  color: var(--bad);
+}
+.verdict--wrong .verdict__icon {
+  background: var(--bad);
+}
+
+.feedback__pairing {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: nowrap;
+  /* Takes what it needs and gives it back under pressure, rather than
+     stretching a two-word pairing across half the bar. */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+/*
+ * Each side of the pairing gives way horizontally rather than wrapping.
+ * Horizontal truncation is the only kind that is safe for Arabic: a second
+ * line here would grow the bar, and a pinned height would shear the
+ * letterforms. The clip headroom keeps the harakat and the descenders
+ * inside the box that does the truncating.
+ */
+.feedback__pairing .phrase {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * Not scaled by --ar-scale. This is a compact label, and coupling one to the
+ * per-face display scale is what once rendered the IndoPak lesson topic at
+ * 23.6px; here it made the bar 66px tall on its own.
+ */
+.feedback__pairing .phrase--ar,
+.feedback__example .phrase--ar {
+  font-size: 15px;
+  line-height: var(--ar-line-height-tight);
+  padding-block: var(--ar-pad-clip);
+}
+
+.feedback__equals {
+  color: var(--text-faint);
+  font-weight: 700;
+  flex: none;
+}
+
+/* The model sentence from the book is the highest-value thing to read after a
+   mistake, so it is shown wherever there is room for it on the line. */
+.feedback__example {
+  display: none;
+}
+
+.feedback__example-en {
+  color: var(--text-soft);
+}
+
+.feedback__source {
+  display: none;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  white-space: nowrap;
+  flex: none;
+}
+
+.feedback .button--next {
+  margin-left: auto;
+  min-height: 40px;
+  flex: none;
+}
+
+/* Provenance is worth a slot once the bar is wide enough to hold it. */
+@media (min-width: 620px) {
+  .feedback__source {
+    display: inline;
+  }
+}
+
+/* The book's model sentence gets its own slot, still on the same line. */
+@media (min-width: 1000px) {
+  .feedback__example {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: nowrap;
+    flex: 0 1 auto;
+    min-width: 0;
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--accent-line);
+  }
+
+  .feedback__example .phrase,
+  .feedback__example-en {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.button--next {
+  min-height: 44px;
+}
+
+/* ----------------------------------------------------------- learn screen */
+
+/*
+ * Same grid as the quiz: header, card (takes the slack), actions, hint. The
+ * card used to be ~465px of mostly empty white with the word floating in the
+ * middle; now the Arabic grows to own the space, which is right for a
+ * flashcard — the word is the content.
+ */
+.learn {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: var(--space-3);
+}
+
+/*
+ * Sized by its content and centred in the row, not stretched to fill it.
+ * Stretching gave a 666px card holding 250px of word — and the answer to
+ * that is both halves of this: the Arabic grows into the space below, and
+ * whatever is still spare becomes air around the card rather than white
+ * inside it.
+ */
+.flashcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 0;
+  max-height: 100%;
+  align-self: center;
+  width: 100%;
+  padding: var(--space-5) var(--space-4);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  /* The card is the reveal control, and the only one, so it has to look
+     touchable. */
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .flashcard:hover {
+    border-color: var(--accent);
+    background: var(--accent-softer);
+  }
+}
+
+.flashcard:active {
+  background: var(--accent-soft);
+}
+
+.flashcard--revealed {
+  border-color: var(--accent-line);
+}
+
+/*
+ * A flashcard is the one place large Arabic is unambiguously right: the word
+ * is the content, and a learner studying an unfamiliar vocalised form needs
+ * the harakat unmistakable. The compound selector is deliberate — the size
+ * modifier .phrase--ar.phrase--xl would otherwise outrank a single class and
+ * pin this to 2.6rem.
+ */
+.flashcard .flashcard__ar.phrase--ar {
+  display: block;
+  color: var(--accent-text);
+  font-size: calc(clamp(2.6rem, 12vh, 7rem) * var(--ar-scale));
+  line-height: 1.5;
+}
+
+/*
+ * Reserved for the tallest case — a meaning plus the book's model sentence
+ * in both scripts — so revealing moves nothing and consecutive cards do not
+ * change height depending on whether the book had a sentence to show.
+ */
+.flashcard__reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 132px;
+}
+
+/* The other half of a flashcard, so it is set to be read, not annotated. */
+.flashcard__en {
+  font-size: clamp(1.25rem, 3.2vh, 1.75rem);
+  font-weight: 650;
+  color: var(--text);
+}
+
+.flashcard__cue {
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+.flashcard__example {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+  width: min(420px, 100%);
+}
+
+.flashcard__example-en {
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+.learn__primary {
+  min-height: 52px;
+  font-size: var(--text-lg);
+}
+
+/* --------------------------------------------------------- results screen */
+
+/* The score, inside the hero: one figure, its denominator and its share. */
+/* An <h1> in markup — the results screen's only heading — sized by its
+   children rather than the browser's h1 default. */
+.score {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 400;
+}
+
+.score__figure {
+  font-size: var(--text-4xl);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.score__of {
+  font-size: var(--text-lg);
+  opacity: 0.85;
+}
+
+.score__percent {
+  margin-inline-start: auto;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- what was missed -------------------------------------------------- */
+
+.misses {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* A sunk panel inside the panel, so a list of thirty reads as one block of
+   study material rather than thirty competing cards. */
+.miss {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+}
+
+/* The question leads and the pills follow it, rather than the prompt being
+   stranded on a line of its own at the far edge of the block. */
+.miss__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  flex-wrap: wrap;
+}
+
+.miss__prompt {
+  font-weight: 650;
+  color: var(--text);
+  min-width: 0;
+}
+
+/* Side by side once there is room: the whole point is the comparison. */
+.miss__answers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+@media (min-width: 620px) {
+  .miss__answers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.miss__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  min-width: 0;
+}
+
+/* Correctness is never colour alone: each line carries an icon and a word. */
+.miss__key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  white-space: nowrap;
+  flex: none;
+}
+
+.miss__line--wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad-line);
+}
+.miss__line--wrong .miss__key {
+  color: var(--bad);
+}
+
+.miss__line--right {
+  background: var(--good-bg);
+  border-color: var(--good-line);
+}
+.miss__line--right .miss__key {
+  color: var(--good);
+}
+
+/* One line, like the quiz's: the book's sentence beside its translation,
+   not stacked and centred in a box of its own. */
+.miss__example {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  background: var(--surface);
+  border-left-color: var(--accent-line);
+}
+
+/* ------------------------------------------------------ reference screen */
+
+/* The book's own name for the lesson, riding on the hero's fill. */
+.reference__title-ar {
+  color: inherit;
+  opacity: 0.95;
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Quoted from the book, marked the same way the model sentences are. */
+.notes__item {
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--accent-line);
+  color: var(--text);
+}
+
+/* ------------------------------------------------- screen reading widths */
+
+/* Reading-length measures for the screens that are mostly prose. */
+.learn,
+.reference {
+  width: min(680px, 100%);
+  margin-inline: auto;
+}
+
+.results {
+  width: min(780px, 100%);
+  margin-inline: auto;
+}
+
+/* Legacy quiz header rules, replaced screen by screen as each moves onto the
+   shared session header. */
+.quiz__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.quiz__status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  flex-wrap: wrap;
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+}
+
+.quiz__status-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.quiz__counter strong,
+.quiz__score strong {
+  color: var(--accent-text);
+  font-size: var(--text-lg);
+}
+
+.quiz__end,
+.learn__exit {
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: var(--space-4);
+  white-space: nowrap;
+}
+
+.quiz__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  width: 100%;
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
