@@ -8,8 +8,18 @@ const KEY = 'theme'
 export interface ThemeApi {
   /** The committed preference: what is persisted and what the modal opens on. */
   theme: ThemeId
+  /**
+   * The concrete `light`/`dark` actually in effect right now — `theme`
+   * itself is `system` half the time, which isn't something a two-way
+   * quick-toggle can highlight.
+   */
+  resolvedTheme: 'light' | 'dark'
   /** Commits a preference. Staging happens in the settings modal, not here. */
   setTheme: (theme: ThemeId) => void
+}
+
+function prefersDark(): boolean {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
 /**
@@ -23,6 +33,10 @@ export interface ThemeApi {
  */
 export function useTheme(): ThemeApi {
   const [theme, setThemeState] = useState<ThemeId>(() => parseTheme(readRaw(KEY)))
+  // Only meaningful while `theme` is "system" — the device's own current
+  // setting, kept as its own state because it changes from outside React
+  // (a media query event), unlike the other branch below.
+  const [systemPrefersDark, setSystemPrefersDark] = useState(prefersDark)
 
   useEffect(() => {
     writeRaw(KEY, theme)
@@ -37,6 +51,7 @@ export function useTheme(): ThemeApi {
     const media = window.matchMedia('(prefers-color-scheme: dark)')
     const apply = () => {
       document.documentElement.dataset.theme = media.matches ? 'dark' : 'light'
+      setSystemPrefersDark(media.matches)
     }
     apply()
     media.addEventListener('change', apply)
@@ -47,5 +62,10 @@ export function useTheme(): ThemeApi {
     setThemeState(parseTheme(next))
   }, [])
 
-  return { theme, setTheme }
+  // Derived at render time rather than mirrored into its own state: the
+  // non-"system" case needs no effect at all, it's just `theme` itself.
+  const resolvedTheme: 'light' | 'dark' =
+    theme === 'system' ? (systemPrefersDark ? 'dark' : 'light') : theme
+
+  return { theme, resolvedTheme, setTheme }
 }

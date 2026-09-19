@@ -58,6 +58,7 @@ const DYNAMIC_PREFIXES = [
   'topic__run--',
   'button--',
   'tooltip--',
+  'stat--',
 ]
 
 describe('every rendered class is styled', () => {

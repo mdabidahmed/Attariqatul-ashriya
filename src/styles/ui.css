@@ -147,6 +147,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  /* So a panel's own children — the stat strip, in particular — can size
+     against the room the sidebar/aside layout actually leaves them, rather
+     than the full viewport, which is not the same thing once the dashboard
+     shell takes its share. */
+  container-type: inline-size;
 }
 
 /* A panel nested inside another panel: tinted, no shadow of its own. */
@@ -223,7 +228,9 @@
 
 .button--primary {
   background: var(--accent);
-  border-color: var(--accent);
+  /* A darker edge than the fill, so the button reads as one crisp shape
+     rather than the border disappearing into its own background. */
+  border-color: var(--accent-strong);
   color: var(--text-on-accent);
 }
 
@@ -245,15 +252,19 @@
  */
 .button--quiet {
   background: var(--surface);
-  border-color: var(--line-strong);
+  /* Was a plain gray border; a blue one ties it back to the accent family
+     it's a quieter member of, without the weight of a filled background. */
+  border-color: var(--accent);
   color: var(--text-soft);
   font-weight: 600;
 }
 
-/* Readable against a filled hero without shouting over the main button. */
+/* Readable against a filled hero without shouting over the main button.
+   Border bumped from 0.45 to 0.7 opacity — the previous edge was too close
+   to the fill's own blue to read as a border rather than a soft glow. */
 .button--on-accent {
   background: rgb(255 255 255 / 0.14);
-  border-color: rgb(255 255 255 / 0.45);
+  border-color: rgb(255 255 255 / 0.7);
   color: var(--text-on-accent);
   font-size: var(--text-sm);
   min-height: 44px;
@@ -652,16 +663,69 @@
   gap: var(--space-3) var(--space-4);
 }
 
-/* Stays two-by-two until one row genuinely fits. Measured across a width
-   sweep: four columns at 560px leave 112px per stat, which is cramped; at
-   680px they get 142px and read properly. */
-@media (min-width: 680px) {
+/*
+ * Stays two-by-two until one row genuinely fits. Measured against the
+ * panel's own width via a container query, not the viewport: at 1024px the
+ * viewport is plenty wide, but the sidebar and right column between them
+ * leave this panel only ~400px, and a viewport media query forced four
+ * columns into that anyway — "Questions answered" broke mid-word at 90px
+ * a card. Four columns at 560px of container leave 142px per stat, which
+ * reads properly.
+ */
+@container (min-width: 560px) {
   .stats {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
+/*
+ * A coloured chip card, one per figure, so the strip reads as four distinct
+ * things at a glance rather than four identical numbers in a row. The tone
+ * only touches the chip and the border — the figure itself stays the
+ * ordinary high-contrast text colour, so the coloured accent never has to
+ * carry the reading contrast on its own.
+ */
 .stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.stat__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+}
+
+.stat--accent .stat__icon {
+  background: var(--accent-softer);
+  color: var(--accent);
+}
+.stat--good .stat__icon {
+  background: var(--good-bg);
+  color: var(--good);
+}
+.stat--warn .stat__icon {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.stat--bad .stat__icon {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.stat__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   min-width: 0;
 }
 
@@ -1242,6 +1306,22 @@ label.row {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--text-on-accent);
+}
+
+/* A row of small filter pills — the lesson-grid tabs — rather than the
+   full-width session-length buttons the base rule is sized for. */
+.segmented--tabs {
+  flex-wrap: wrap;
+}
+
+.segmented--tabs .segmented__item {
+  flex: none;
+  min-height: 32px;
+  padding: 5px var(--space-3);
+  border-radius: var(--radius-pill);
+  border-color: var(--line);
+  font-size: var(--text-xs);
+  font-weight: 600;
 }
 
 .segmented--stack {

@@ -1,20 +1,14 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
-
-import { countAvailable, countByMode, type BookIndex } from '../domain/bookIndex'
-import { MODE_IDS } from '../domain/modes'
-import { buildStudyPlan } from '../domain/plan'
-import { lessonMasteryAll, poolCounts } from '../domain/scheduler'
+import heroBanner from './assets/images/hero-banner.jpg'
+import type { LessonMastery } from '../domain/scheduler'
 import { percentage } from '../domain/scoring'
-import type { Book, SessionFocus, SessionSetup, StudyState } from '../domain/types'
-import { useNow } from '../hooks/useNow'
-import type { ArabicFontApi } from '../state/useArabicFont'
-import type { ThemeApi } from '../state/useTheme'
-import GearIcon from './icons/GearIcon'
+import type { Book, Lesson, SessionFocus, StudyState } from '../domain/types'
+import KnowledgeBannerCard from './KnowledgeBannerCard'
+import LearningSummaryCard from './LearningSummaryCard'
 import LessonGrid, { type LessonRow } from './LessonGrid'
-import Phrase from './Phrase'
 import PractiseHero from './PractiseHero'
-import SettingsDialog from './SettingsDialog'
-import SetupPanel from './SetupPanel'
+import QuoteCard from './QuoteCard'
+import { ClipboardCheckIcon, FlameIcon, LessonsIcon, TargetIcon } from './shell/icons'
+import StudyTipsCard from './StudyTipsCard'
 import Button from './ui/Button'
 import Panel from './ui/Panel'
 import SectionHead from './ui/SectionHead'
@@ -23,204 +17,132 @@ import StatStrip from './ui/StatStrip'
 
 interface HomeScreenProps {
   book: Book
-  index: BookIndex
   study: StudyState
-  setup: SessionSetup
-  onChangeSetup: (setup: SessionSetup) => void
+  lessonRows: readonly LessonRow[]
+  nextLesson: Lesson | null
+  nextLessonMastery: LessonMastery | null
+  reviewCount: number
+  customAvailable: number
   onStart: (focus: SessionFocus, lessonIds?: number[]) => void
   onLearn: (lessonId: number) => void
   onOpenReference: (lessonId: number) => void
   onResetProgress: () => void
-  fonts: ArabicFontApi
-  themeApi: ThemeApi
+  isBookmarked: (lessonId: number) => boolean
+  onToggleBookmark: (lessonId: number) => void
 }
 
+/**
+ * The dashboard's landing page: what to practise next, a condensed sense of
+ * progress, and the lessons currently in play. The full lesson browser,
+ * the custom session builder and the bookmarked list all moved out to their
+ * own pages — this one stays about *today*, not the whole book.
+ */
 export default function HomeScreen({
   book,
-  index,
   study,
-  setup,
-  onChangeSetup,
+  lessonRows,
+  nextLesson,
+  nextLessonMastery,
+  reviewCount,
+  customAvailable,
   onStart,
   onLearn,
   onOpenReference,
   onResetProgress,
-  fonts,
-  themeApi,
+  isBookmarked,
+  onToggleBookmark,
 }: HomeScreenProps) {
-  const now = useNow()
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const gearRef = useRef<HTMLButtonElement>(null)
-
-  // Native <dialog> restores focus on close, but be explicit about it so the
-  // gear is never left unfocused after Escape or a backdrop dismissal.
-  const closeSettings = useCallback(() => {
-    setSettingsOpen(false)
-    gearRef.current?.focus()
-  }, [])
-
-  const plan = useMemo(
-    () => buildStudyPlan(book.lessons, index, study.items, now),
-    [book.lessons, index, study.items, now],
-  )
-
-  const masteryByLesson = useMemo(
-    () => lessonMasteryAll(index.byLesson, study.items, now),
-    [index.byLesson, study.items, now],
-  )
-
-  const lessonRows = useMemo<LessonRow[]>(
-    () =>
-      book.lessons.map((lesson) => ({
-        lesson,
-        mastery: masteryByLesson.get(lesson.id) ?? {
-          lessonId: lesson.id,
-          fraction: 0,
-          total: 0,
-          started: 0,
-          mastered: 0,
-          weak: 0,
-          due: 0,
-        },
-        referenceOnly: index.referenceLessonIds.has(lesson.id),
-        isNext: plan.nextLessonId === lesson.id,
-      })),
-    [book.lessons, masteryByLesson, index.referenceLessonIds, plan.nextLessonId],
-  )
-
-  const nextLesson = useMemo(
-    () => book.lessons.find((lesson) => lesson.id === plan.nextLessonId) ?? null,
-    [book.lessons, plan.nextLessonId],
-  )
-
-  // Drawn from everything practised, not just the current selection: a mistake
-  // in lesson four should still resurface while working on lesson twelve.
-  const pools = useMemo(
-    () => poolCounts(index.answerable, study.items, now),
-    [index.answerable, study.items, now],
-  )
-
-  const customAvailable = useMemo(
-    () => countAvailable(index, setup.lessonIds, setup.modes),
-    [index, setup.lessonIds, setup.modes],
-  )
-
-  const availabilityByMode = useMemo(
-    () => countByMode(index, setup.lessonIds, MODE_IDS),
-    [index, setup.lessonIds],
-  )
-
   const { lifetime, streak } = study
-  const reviewCount = pools.weak + pools.due
-  const startedCount = plan.startedLessonIds.length
+  const startedCount = lessonRows.filter((row) => row.mastery.started > 0).length
 
   return (
     <section className="screen home">
-      {/* A compact identity strip. The title used to take ~125px plus a gap
-          before anything actionable appeared. */}
-      <header className="masthead">
-        <h1 className="masthead__title">
-          <span className="masthead__title-en">{book.meta.titleEn}</span>
-          <span className="masthead__sep" aria-hidden="true" />
-          <Phrase className="masthead__title-ar" text={book.meta.titleAr} lang="ar" size="sm" inline />
-        </h1>
-        <button
-          type="button"
-          className="icon-button icon-button--settings"
-          onClick={() => setSettingsOpen(true)}
-          aria-label="Settings"
-          aria-haspopup="dialog"
-          ref={gearRef}
-        >
-          <GearIcon />
-        </button>
-      </header>
-
-      <PractiseHero
-        lesson={nextLesson}
-        mastery={nextLesson ? (masteryByLesson.get(nextLesson.id) ?? null) : null}
-        reviewCount={reviewCount}
-        hasPractisedBefore={lifetime.sessions > 0}
-        canPractiseSelection={customAvailable > 0}
-        onStart={onStart}
-        onLearn={onLearn}
-      />
-
-      {/* The streak lives here, beside the progress it belongs to, instead
-          of stranded in the top-right corner of the page. */}
-      <Panel>
-        <SectionHead
-          title="Your progress"
-          action={
-            lifetime.seen > 0 ? (
-              <Button variant="quiet" size="tiny" onClick={onResetProgress}>
-                Reset
-              </Button>
-            ) : null
-          }
-        />
-
-        {lifetime.seen > 0 ? (
-          <StatStrip>
-            <Stat
-              label="Lessons started"
-              value={startedCount}
-              note={`/${index.quizzableLessonIds.size}`}
+      <div className="home-grid">
+        <div className="home-grid__main">
+          <div className="hero-frame" style={{ backgroundImage: `url(${heroBanner})` }}>
+            <PractiseHero
+              lesson={nextLesson}
+              mastery={nextLessonMastery}
+              reviewCount={reviewCount}
+              hasPractisedBefore={lifetime.sessions > 0}
+              canPractiseSelection={customAvailable > 0}
+              onStart={onStart}
+              onLearn={onLearn}
             />
-            <Stat label="Questions answered" value={lifetime.seen} />
-            <Stat label="Accuracy" value={`${percentage(lifetime.correct, lifetime.seen)}%`} />
-            <Stat
-              label="Day streak"
-              value={streak.current}
-              note={streak.best > streak.current ? `best ${streak.best}` : undefined}
+          </div>
+
+          <Panel>
+            <SectionHead
+              title="Your progress"
+              action={
+                lifetime.seen > 0 ? (
+                  <Button variant="quiet" size="tiny" onClick={onResetProgress}>
+                    Reset
+                  </Button>
+                ) : null
+              }
             />
-          </StatStrip>
-        ) : (
-          <p className="text-soft text-sm">
-            Nothing practised yet. Finish the first round above and your streak, accuracy and lesson-by-lesson
-            progress will show up here.
-          </p>
-        )}
-      </Panel>
 
-      <Panel>
-        <LessonGrid
-          rows={lessonRows}
-          onLearn={onLearn}
-          onPractise={(lessonId) => onStart('lesson', [lessonId])}
-          onOpenReference={onOpenReference}
-        />
-      </Panel>
+            <StatStrip>
+              <Stat
+                icon={<LessonsIcon size={18} />}
+                tone="accent"
+                label="Lessons started"
+                value={startedCount}
+                note={`/${book.lessons.length}`}
+              />
+              <Stat
+                icon={<ClipboardCheckIcon size={18} />}
+                tone="good"
+                label="Questions answered"
+                value={lifetime.seen}
+              />
+              <Stat
+                icon={<TargetIcon size={18} />}
+                tone="bad"
+                label="Accuracy"
+                value={`${percentage(lifetime.correct, lifetime.seen)}%`}
+              />
+              <Stat
+                icon={<FlameIcon size={18} />}
+                tone="warn"
+                label="Day streak"
+                value={streak.current}
+                note={streak.best > streak.current ? `best ${streak.best}` : undefined}
+              />
+            </StatStrip>
+            {lifetime.seen === 0 ? (
+              <p className="text-soft text-sm">
+                Finish the first round above and these will start moving.
+              </p>
+            ) : null}
+          </Panel>
 
-      <details className="disclosure">
-        <summary className="disclosure__summary">
-          Practise something else
-          <span className="text-faint text-sm">
-            {setup.lessonIds.length === book.lessons.length
-              ? `all ${book.lessons.length} lessons`
-              : `${setup.lessonIds.length} of ${book.lessons.length} lessons`}{' '}
-            · {customAvailable} questions ready
-          </span>
-        </summary>
-        <SetupPanel
-          lessons={book.lessons}
-          index={index}
-          setup={setup}
-          availabilityByMode={availabilityByMode}
-          available={customAvailable}
-          onChange={onChangeSetup}
-          onStart={() => onStart('mixed')}
-        />
-      </details>
+          <Panel>
+            <LessonGrid
+              rows={lessonRows}
+              onLearn={onLearn}
+              onPractise={(lessonId) => onStart('lesson', [lessonId])}
+              onOpenReference={onOpenReference}
+              isBookmarked={isBookmarked}
+              onToggleBookmark={onToggleBookmark}
+            />
+          </Panel>
+        </div>
 
-      <SettingsDialog
-        open={settingsOpen}
-        font={fonts.font}
-        theme={themeApi.theme}
-        onCommit={fonts.setFont}
-        onChangeTheme={themeApi.setTheme}
-        onClose={closeSettings}
-      />
+        <aside className="home-grid__aside">
+          <QuoteCard />
+          <StudyTipsCard />
+          <LearningSummaryCard
+            lessonsStarted={startedCount}
+            totalLessons={book.lessons.length}
+            questionsAnswered={lifetime.seen}
+            accuracyPercent={percentage(lifetime.correct, lifetime.seen)}
+            streakDays={streak.current}
+          />
+          <KnowledgeBannerCard />
+        </aside>
+      </div>
     </section>
   )
 }

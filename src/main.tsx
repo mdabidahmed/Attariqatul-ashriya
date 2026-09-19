@@ -9,6 +9,7 @@ import './styles/base.css'
 // it. A screen may override a shared rule; it may never replace one.
 import './styles/ui.css'
 import './styles/components.css'
+import './styles/shell.css'
 
 const container = document.getElementById('root')
 if (!container) throw new Error('Missing #root element in index.html')

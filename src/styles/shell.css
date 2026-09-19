@@ -1,0 +1,501 @@
+/*
+ * The dashboard shell: sidebar, topbar and the page grid Home uses. Only the
+ * "browsing" screens (Home, Lessons, Practice, Bookmarks, Progress) render
+ * this; the quiz and flashcard screens keep the original fixed-viewport
+ * layout in `components.css`/`ui.css`'s `.app--fixed`.
+ */
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ------------------------------------------------------------- sidebar */
+
+.sidebar {
+  flex: none;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-4);
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+
+.sidebar__brand {
+  display: flex;
+  min-width: 0;
+}
+
+/* A single pre-composed logo image (icon, English/Arabic title and the
+   decorative lattice all baked in by design) rather than a live text
+   lockup — see the comment beside its <img> in Sidebar.tsx for why that's
+   fine here specifically. Scales to the sidebar's own width, whatever that
+   is, rather than a fixed size, so it isn't fighting the responsive
+   breakpoints below. */
+.sidebar__brand-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sidebar__item {
+  /* These are plain <button>s, and unlike `.button`, this rule never reset
+     the browser's own default button chrome — every item was quietly
+     rendering its native gray face and border underneath the intended
+     hover/active colors, which is exactly the heavy boxed look this was
+     supposed to not have. */
+  appearance: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-soft);
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .sidebar__item:hover {
+    background: var(--surface-sunk);
+    color: var(--text);
+  }
+
+  .sidebar__item:hover .icon {
+    color: var(--accent);
+  }
+}
+
+/*
+ * A left accent bar, not a border box: a ring around every item read as
+ * heavy chrome. The bar is a pseudo-element rather than a real border so it
+ * cannot nudge the row's own padding when it appears.
+ */
+.sidebar__item--on {
+  background: var(--accent-softer);
+  color: var(--accent-text);
+  font-weight: 650;
+}
+
+.sidebar__item--on::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+.sidebar__item--on .icon {
+  color: var(--accent);
+}
+
+/* -------------------------------------------------------------- topbar */
+
+.shell__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.topbar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1 1 320px;
+  max-width: 420px;
+  padding: 7px var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--surface-sunk);
+  color: var(--text-faint);
+}
+
+.topbar__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+/* Firefox and Chromium both draw a native clear/search decoration; the app
+   already gives the field its own affordance via the leading icon. */
+.topbar__search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: none;
+}
+
+.theme-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunk);
+  border: 1px solid var(--line);
+}
+
+.theme-toggle__item {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  color: var(--text-faint);
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+/* Neither icon-only button here had any hover feedback at all — the only
+   state that ever showed was the active one. */
+@media (hover: hover) {
+  .theme-toggle__item:not(.theme-toggle__item--on):hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .avatar-button:hover {
+    background: var(--accent-strong);
+  }
+}
+
+.theme-toggle__item--on {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.avatar-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+  font-family: var(--font-ui);
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+/* 30px and 36px are fine for a mouse pointer; a thumb needs the same 44px
+   floor the lesson tiles already use. The visible circle stays the same
+   size — only the tappable area around it grows, via a transparent
+   padding hack that doesn't disturb the topbar's own layout. */
+@media (pointer: coarse) {
+  .theme-toggle__item,
+  .avatar-button {
+    position: relative;
+  }
+
+  .theme-toggle__item::after,
+  .avatar-button::after {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* ------------------------------------------------------------- content */
+
+.shell__content {
+  flex: 1;
+  /* Was capped at 1160px, which on anything wider than a small laptop left
+     a growing dead margin beside the sidebar — the "large unused page
+     space" the narrow-column look came from. 1800px is a ceiling against
+     absurd line lengths on an ultrawide monitor, not a target: on ordinary
+     desktop widths this now simply fills what the sidebar leaves behind. */
+  width: 100%;
+  max-width: 1800px;
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ---------------------------------------------------------- home grid */
+
+/*
+ * Was a fixed 280px second column, which read as "a small column" no
+ * matter how wide the first one got. `minmax(300px, min(32%, 420px))`
+ * keeps the aside a genuine proportion of the page (spec: ~25-30%) instead
+ * of a fixed width, floored so it never gets cramped and capped so it
+ * never dominates on an ultrawide monitor.
+ */
+.home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, min(32%, 420px));
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.home-grid__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.home-grid__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/*
+ * `background-image` is set inline per-render (it's an imported asset URL,
+ * not a static value), so only sizing lives here. `var(--accent)` is the
+ * fallback fill while the image loads or if it fails.
+ */
+.hero-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--accent);
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  box-shadow: var(--shadow);
+}
+
+/* The frame carries the fill and the shadow, so the hero card inside it goes
+   transparent — otherwise its own opaque background painted straight over
+   the banner sitting behind it in the same stacking context. */
+.hero-frame .hero {
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The whole card is a supplied image here — see `StudyTipsCard.tsx` — so
+   this only sizes it: full width, its own aspect ratio, the same radius
+   the rest of the app's cards use in case the source's own rounded
+   corners don't quite reach the edge. */
+.knowledge-banner,
+.quote-card {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+/*
+ * Re-cropped past its own thick baked-in blue frame (see the source PNG),
+ * which sat visually heavier than every other card in this column. A plain
+ * 1px hairline — the same weight `.summary-card` uses — brings it back in
+ * line with the rest instead of standing out.
+ */
+.tips-card {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.summary-card {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.summary-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 650;
+  margin-bottom: var(--space-3);
+}
+
+.summary-card__icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-softer);
+  color: var(--accent);
+}
+
+.summary-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.summary-card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-1);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--text-sm);
+}
+
+.summary-card__row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.summary-card__row dt {
+  color: var(--text-soft);
+}
+
+.summary-card__row dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------- bookmarks */
+
+.bookmark-toggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+@media (hover: hover) {
+  .bookmark-toggle:hover {
+    background: var(--surface-sunk);
+    color: var(--text);
+  }
+}
+
+.bookmark-toggle--on {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------- responsive */
+
+/*
+ * Below this width the sidebar repaints as a bottom tab bar rather than a
+ * left column — one nav, two layouts, following the same coarse-pointer
+ * breakpoint already used for the quiz tiles.
+ */
+@media (max-width: 900px) {
+  .home-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    order: 0;
+  }
+
+  /* The logo bakes the icon and both titles into one image, so there is
+     no separable "icon only" version of it left to keep the way the old
+     icon+text lockup could — it hides as a whole in the compact bar. */
+  .sidebar__brand {
+    display: none;
+  }
+
+  .sidebar__nav {
+    flex-direction: row;
+    gap: var(--space-1);
+    overflow-x: auto;
+  }
+
+  .sidebar__item span:last-child {
+    display: none;
+  }
+
+  .sidebar__item {
+    padding: var(--space-2);
+  }
+
+  /* The accent bar reads as "left of this row" in a vertical list; in the
+     horizontal bottom bar it becomes "under this icon" instead. */
+  .sidebar__item--on::before {
+    left: 20%;
+    right: 20%;
+    top: auto;
+    bottom: -1px;
+    width: auto;
+    height: 3px;
+  }
+
+  .shell__content {
+    padding: var(--space-4);
+  }
+
+  .topbar {
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar__search {
+    flex: 1 1 auto;
+  }
+}

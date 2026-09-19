@@ -103,6 +103,11 @@ function serveDataDirectory(): Plugin {
 }
 
 export default defineConfig({
+  // Served from https://mdabidahmed.github.io/Attariqatul-ashriya/ as a
+  // project page, not a custom domain, so every asset URL needs the repo
+  // name as a prefix. Only affects `vite build`; the dev server still
+  // serves from `/`.
+  base: '/Attariqatul-ashriya/',
   plugins: [react(), serveDataDirectory()],
   server: { port: 5173 },
   preview: { port: 4173 },
